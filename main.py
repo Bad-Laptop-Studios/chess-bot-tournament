@@ -8,14 +8,14 @@ import time
 import bots.randobot as randobot
 import bots.constbot as constbot
 
-board: chess.Board = chess.Board()
-
-bot1: Bot = randobot.Bot()
-bot2: Bot = constbot.Bot()
-
 TURN_DURATION = 1
 
 def main():
+    board: chess.Board = chess.Board()
+
+    bot1: Bot = randobot.Bot()
+    bot2: Bot = constbot.Bot()
+
     # while not board.is_checkmate():
     board_display = display.start(board.fen())
     for i in range(10):

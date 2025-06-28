@@ -5,6 +5,7 @@ ROOK   = 'r'
 BISHOP = 'b'
 KNIGHT = 'n'
 PAWN   = 'p'
+NONE   = '-'
 
 Colour = int    # eg. 0
 WHITE = 0
