@@ -1,5 +1,20 @@
 # ░ ▒ ▓ █
 
+ROWS = 8
+COLS = 8
+
+def meta_element_addition(array: list[list[int]], x: int):
+    return [[elem + x for elem in row] for row in array]
+
+def meta_element_multiplication(array: list[list[int]], x: int):
+    return [[elem * x for elem in row] for row in array]
+
+def meta_element_inverse(array: list[list[int]], max: int):
+    return [[max - elem for elem in row] for row in array]
+
+def inverse(array: list[list[int]]):
+    meta_max = max(elem for row in array for elem in row)
+    return meta_element_inverse(array, meta_max + 1)
 
 
 # ██ ██ ██ ██ ██ ██ ██ ██
@@ -39,6 +54,7 @@ REVERSE_STAIRWAY = 1 * \
      [7, 7, 7, 7, 7, 7, 7, 7],
      [8, 8, 8, 8, 8, 8, 8, 8],
     ]
+INVERSE_STAIRWAY = inverse(STAIRWAY)
 
 # ░░ ░░ ░░ ░░ ░░ ░░ ░░ ░░
 # ░░ ▒▒ ▒▒ ▒▒ ▒▒ ▒▒ ▒▒ ░░
@@ -58,6 +74,7 @@ CENTRE = 2 * \
      [1, 2, 2, 2, 2, 2, 2, 1],
      [1, 1, 1, 1, 1, 1, 1, 1],
     ]
+INVERSE_CENTRE = inverse(CENTRE)
 
 # ░░ ░░ ▒▒ ▒▒ ▒▒ ▒▒ ░░ ░░
 # ░░ ▒▒ ▒▒ ▓▓ ▓▓ ▒▒ ▒▒ ░░
@@ -77,6 +94,7 @@ DIAMOND = 1 * \
      [2, 3, 4, 5, 5, 4, 3, 2],
      [1, 2, 3, 4, 4, 3, 2, 1],
     ]
+INVERSE_DIAMOND = inverse(DIAMOND)
 
 # ██ ██ ██ ██ ██ ██ ██ ██
 # ██ ██ ██ ██ ██ ██ ██ ██
@@ -95,4 +113,35 @@ CONSTANT = 1 * \
      [1, 1, 1, 1, 1, 1, 1, 1],
      [1, 1, 1, 1, 1, 1, 1, 1],
      [1, 1, 1, 1, 1, 1, 1, 1],
+    ]
+
+# ██ ██ ██ ██ ██ ██ ██ ██
+# ██ ██ ██ ▓▓ ▓▓ ██ ██ ██
+# ██ ██ ▓▓ ▓▓ ▓▓ ▓▓ ██ ██
+# ██ ▓▓ ▓▓ ▒▒ ▒▒ ▓▓ ▓▓ ██
+# ▓▓ ▓▓ ▒▒ ▒▒ ▒▒ ▒▒ ▓▓ ▓▓
+# ▓▓ ▒▒ ▒▒ ░░ ░░ ▒▒ ▒▒ ▓▓
+# ▒▒ ▒▒ ░░ ░░ ░░ ░░ ▒▒ ▒▒
+# ▒▒ ░░ ░░ ░░ ░░ ░░ ░░ ▒▒
+FORWARD_CORNERS = 1 * \
+    [[8, 8, 7, 7, 7, 7, 8, 8],
+     [8, 7, 7, 6, 6, 7, 7, 8],
+     [7, 7, 6, 6, 6, 6, 7, 7],
+     [7, 6, 6, 5, 5, 6, 6, 7],
+     [6, 6, 5, 5, 5, 5, 6, 6],
+     [6, 5, 5, 4, 4, 5, 5, 6],
+     [5, 5, 4, 4, 4, 4, 5, 5],
+     [5, 4, 4, 3, 3, 4, 4, 5],
+    ]
+
+
+FORWARD_CENTRE = 1 * \
+    [[7, 7, 8, 8, 8, 8, 7, 7],
+     [6, 7, 7, 8, 8, 7, 7, 6],
+     [6, 6, 7, 7, 7, 7, 6, 6],
+     [5, 6, 6, 7, 7, 6, 6, 5],
+     [5, 5, 6, 6, 6, 6, 5, 5],
+     [4, 5, 5, 6, 6, 5, 5, 4],
+     [4, 4, 5, 5, 5, 5, 4, 4],
+     [3, 4, 4, 5, 5, 4, 4, 3],
     ]

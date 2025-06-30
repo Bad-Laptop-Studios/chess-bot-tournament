@@ -1,8 +1,7 @@
 from chess import Board
 from bots.bot_template import Bot
-from constants import *
+from tools.constants import *
 
-import random
 
 class MyBot(Bot):
     """ Example implementation of Bot. """

@@ -1,0 +1,112 @@
+from chess import Board as ChessBoard
+from constants import *
+
+from dataclasses import dataclass
+
+from multipledispatch import dispatch
+
+
+class Position:
+    """
+    >>> alpha = Position("a2")
+    >>> alpha.get_alpha()
+    "a2"
+    >>> alpha.get_vector()
+    (2, 1)
+    >>> print(alpha)
+    a2
+    >>> vector = Position(2, 3)
+    >>> vector.get_alpha()
+    "c2"
+    >>> vector.get_vector()
+    (2, 3)
+    >>> print(vector)
+    c2
+    """
+    @dispatch(str)
+    def __init__(self, file_rank: str):
+        """"""
+        if not len(file_rank) == 2:
+            pass    # TODO
+        self.row = 1
+        self.col = 1  
+
+    @dispatch(int, int)
+    def __init__(self, row: int, col: int):
+        """3,5"""
+        self.row = row
+        self.col = col
+
+    COLUMN_LOOKUP = "abcdefgh"
+
+    def __str__(self):
+        return self.get_alphanumeric()
+    
+    def get_alphanumeric(self) -> PositionAlpha:
+        return self.COLUMN_LOOKUP[self.col - 1] + str(self.row)
+    
+    def get_vector(self) -> PositionVector:
+        return self.row, self.col
+
+
+class Piece:
+    """TODO."""
+    @dispatch(PieceType, Colour, Position)
+    def __init__(self, type: PieceType, colour: Colour, position: Position) -> None:
+        self.type: PieceType = type
+        self.colour: Colour = colour
+        self.position: Position = position
+
+                                               # PositionVector
+    @dispatch(PieceType, Colour, PositionAlpha | tuple)
+    def __init__(self, type: PieceType, colour: Colour, position: PositionAlpha) -> None:
+        self.type: PieceType = type
+        self.colour: Colour = colour
+        self.position: Position = Position(position)
+
+    def __str__(self):
+        return f"Piece('{self.type}', '{self.colour}', '{self.position}')"
+
+
+class Board(ChessBoard):
+
+    def get_pieces(piece: PieceType=None, colour: Colour=None) -> list[Piece]:
+        """
+        >>> board = Board()
+        >>> board.get_pieces()
+        [... every piece on the board ...]
+        >>> board.get_pieces(QUEEN)
+        [Piece('q', 'w', 'd1'), Piece('q', 'b', 'd8')]
+        >>> board.get_pieces(QUEEN, WHITE)
+        [Piece('q', 'w', 'd1')]
+        >>> board.get_pieces(QUEEN, BLACK)
+        [Piece('q', 'b', 'd8')]
+        >>> board.get_pieces(ROOK, WHITE)
+        [Piece('r', 'w', 'a1'), Piece('r', 'w', 'h1')]
+        """
+        pass
+
+    def piece_attacks(piece: Piece) -> list[Piece] | None:
+        """
+        """
+
+    def position_attacks(position: Position) -> list[Piece] | None:
+        """
+        CODE IS INVALID
+        >>> board = Board()
+        >>> board.get_pieces(board, WHITE, 'a1')
+        []
+        >>> board.get_pieces(board, WHITE, 'd4')
+        None                                            # no piece at d4
+        >>> board.move(board, WHITE, 'd2d3')            # not a real function
+        >>> board.move(board, WHITE, 'c1h6')
+        >>> board.get_pieces(board, WHITE, 'h6')
+        ['g7']
+
+        >>> board.get_pieces(board, WHITE, 'd6', QUEEN)
+        ['c7', 'd7', 'e7']
+        >>> board.get_pieces(board, WHITE, 'd6', KNIGHT)
+        ['b7', 'c8', 'e8', 'f7']
+        """
+        pass
+

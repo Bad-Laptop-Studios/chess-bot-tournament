@@ -1,4 +1,4 @@
-Piece = str     # eg. 'k'
+PieceType = str # eg. 'k'
 KING   = 'k'
 QUEEN  = 'q'
 ROOK   = 'r'
@@ -7,8 +7,9 @@ KNIGHT = 'n'
 PAWN   = 'p'
 NONE   = '-'
 
-Colour = int    # eg. 0
-WHITE = 0
-BLACK = 1
+Colour = str    # eg. 'w'
+WHITE = 'w'
+BLACK = 'b'
 
-Position = str  # eg. 'a1'
+PositionAlpha = str                 # eg. 'a1'
+PositionVector = tuple[int, int]    # eg. (1, 1)
