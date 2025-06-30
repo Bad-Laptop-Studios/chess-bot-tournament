@@ -13,20 +13,20 @@ TURN_DURATION = 1
 def main():
     board: chess.Board = chess.Board()
 
-    bot1: Bot = randobot.Bot()
-    bot2: Bot = constbot.Bot()
+    bot1: Bot = randobot.MyBot()
+    bot2: Bot = constbot.MyBot()
 
-    # while not board.is_checkmate():
-    board_display = display.start(board.fen())
-    for i in range(10):
-        make_move(board, board_display, bot1)
-        make_move(board, board_display, bot2)
-    display.terminate
+    while not board.is_checkmate():
+        board_display = display.start(board.fen())
+        for i in range(10):
+            make_move(board, board_display, bot1)
+            make_move(board, board_display, bot2)
+        display.terminate
 
 def make_move(board: chess.Board, board_display, bot: Bot):
     results = {}
     for move in board.legal_moves:
-        results[move] = bot.heuristic()
+        results[move] = bot.heuristic(board)
 
     best_move = max(results, key=results.get)
 

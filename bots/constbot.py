@@ -1,11 +1,11 @@
-from chess import Board
+from chess import Board as ChessBoard
 from bots.bot_template import Bot
 from tools.constants import *
 
 
 class MyBot(Bot):
     """ Example implementation of Bot. """
-    def heuristic(board):
+    def heuristic(self, board: ChessBoard) -> float:
         return 0
     
     def get_values(self) -> dict[str, float]:

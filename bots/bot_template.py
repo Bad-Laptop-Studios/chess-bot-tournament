@@ -1,12 +1,13 @@
-from chess import Board
-from bots.bot_template import Bot
+from chess import Board as ChessBoard
+from bots.bot import Bot
 from tools.constants import *
+from tools.board import *
 
 # add your imports here
 
 class MyBot(Bot):
     """ Implement your bot here. """
-    def heuristic(self, board: Board) -> float:
+    def heuristic(self, board: ChessBoard) -> float:
         """ Implement this method to evaluate the board position. """
         return 0
 

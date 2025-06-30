@@ -1,6 +1,6 @@
-from chess import Board
+from chess import Board as ChessBoard
 from tools.constants import *
-from tools.analyser import Analyser
+from tools.board import *
 
 from typing import final
 
@@ -8,19 +8,19 @@ from typing import final
 class Bot:
     """ Template for creating a bot. """
     @final
-    def __init__(self, colour: Colour):
+    def __init__(self):
         """ 
         Initialise the bot and variables. DO NOT MODIFY.
         """
-        self.board = None
-        self.colour = colour
-        self.analyser = Analyser
+        self.chess_board = None
+        # self.colour = colour
+        self.board = Board
 
         self.initialise()
 
 
     @final
-    def set_board(self, board: Board) -> None:
+    def set_board(self, board: ChessBoard) -> None:
         self.board = board
 
 
@@ -29,7 +29,7 @@ class Bot:
         pass
 
 
-    def heuristic(self, board: Board) -> float:
+    def heuristic(self, board: ChessBoard) -> float:
         """
         Evaluates the provided board state and returns the perceived evaluation score.
         A high number represents a more favourable board state for the bot.

@@ -1,5 +1,5 @@
 from chess import Board as ChessBoard
-from constants import *
+from tools.constants import *
 
 from dataclasses import dataclass
 
@@ -58,8 +58,21 @@ class Piece:
         self.position: Position = position
 
                                                # PositionVector
-    @dispatch(PieceType, Colour, PositionAlpha | tuple)
+    # @dispatch(PieceType, Colour, PositionAlpha | tuple)
+    # def __init__(self, type: PieceType, colour: Colour, position: PositionAlpha) -> None:
+    #     self.type: PieceType = type
+    #     self.colour: Colour = colour
+    #     self.position: Position = Position(position)
+
+    # The above didn't seem to work because of 'PositionAlpha | tuple' so I duplicated it and seperated the PositionAlpha and tuple
+    @dispatch(PieceType, Colour, PositionAlpha)
     def __init__(self, type: PieceType, colour: Colour, position: PositionAlpha) -> None:
+        self.type: PieceType = type
+        self.colour: Colour = colour
+        self.position: Position = Position(position)
+
+    @dispatch(PieceType, Colour, tuple)
+    def __init__(self, type: PieceType, colour: Colour, position: tuple) -> None:
         self.type: PieceType = type
         self.colour: Colour = colour
         self.position: Position = Position(position)
