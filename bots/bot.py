@@ -8,20 +8,21 @@ from typing import final
 class Bot:
     """ Template for creating a bot. """
     @final
-    def __init__(self):
+    def __init__(self, bot_id):
         """ 
         Initialise the bot and variables. DO NOT MODIFY.
         """
-        self.chess_board = None
+        # self.chess_board = None
         # self.colour = colour
-        self.board = Board
+        # self.board = Board
+        self.bot_id = bot_id
 
         self.initialise()
 
 
-    @final
-    def set_board(self, board: ChessBoard) -> None:
-        self.board = board
+    # @final
+    # def set_board(self, board: Board) -> None:
+    #     self.board = board
 
 
     def initialise(self):
@@ -29,7 +30,7 @@ class Bot:
         pass
 
 
-    def heuristic(self, board: ChessBoard) -> float:
+    def heuristic(self, board: Board) -> float:
         """
         Evaluates the provided board state and returns the perceived evaluation score.
         A high number represents a more favourable board state for the bot.
@@ -37,7 +38,7 @@ class Bot:
         raise NotImplementedError
     
 
-    def get_values(self) -> dict[Piece, float]:
+    def provide_piece_values(self) -> dict[PieceType, float]:
         return {
             KING: 0, # represents the value of checking your opponent's king (may need to rethink this)
             QUEEN: 9,
@@ -47,7 +48,7 @@ class Bot:
             PAWN: 1
         }
     
-    def get_game_over_evaluations(self) -> dict[str, float]:
+    def provide_game_over_evaluations(self) -> dict[str, float]:
         return {
             "win": INFINITY,
             "draw": 0,

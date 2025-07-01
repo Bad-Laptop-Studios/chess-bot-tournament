@@ -5,10 +5,12 @@ from tools.board import *
 # add your imports here
 
 class MyBot(Bot):
-    """ Implement your bot here. """
-    def heuristic(self, board: Board, my_colour, opposition_colour) -> float:
+    """ Maximises the piece point advantage. """
+    def heuristic(self, board: Board) -> float:
         """ Implement this method to evaluate the board position. """
-        return 0
+        
+        score = board.get_value(board.get_pieces(colour='w')) - board.get_value(board.get_pieces(colour='b'))
+        return score
 
 
     def provide_piece_values(self) -> dict[Piece, float]:

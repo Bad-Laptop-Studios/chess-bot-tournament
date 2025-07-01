@@ -7,9 +7,17 @@ KNIGHT = 'n'
 PAWN   = 'p'
 NONE   = '-'
 
+PIECES = [NONE, PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING]
+PIECE_TYPES = [1, 2, 3, 4, 5, 6]
+
+# should probably change to true/false
 Colour = str    # eg. 'w'
 WHITE = 'w'
 BLACK = 'b'
+NONE = '-' # (duplicate) is this improper??
+
+COLOURS = [WHITE, BLACK, NONE]
+
 
 PositionAlpha = str                 # eg. 'a1'
 PositionVector = tuple[int, int]    # eg. (1, 1)

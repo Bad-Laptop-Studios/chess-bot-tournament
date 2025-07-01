@@ -1,3 +1,4 @@
+import chess
 from chess import Board as ChessBoard
 from tools.constants import *
 
@@ -82,8 +83,15 @@ class Piece:
 
 
 class Board(ChessBoard):
+    # @dispatch(dict)
+    # def __init__(self, piece_values: dict):
+    #     self.piece_values: dict = piece_values
 
-    def get_pieces(piece: PieceType=None, colour: Colour=None) -> list[Piece]:
+    def retrieve_piece_values(self, piece_values: dict[PieceType, int]):
+        self.piece_values = piece_values
+
+    # need to change colour to match the assumption that all bots are white
+    def get_pieces(self, piece: PieceType=NONE, colour: Colour=NONE) -> list[Piece]:
         """
         >>> board = Board()
         >>> board.get_pieces()
@@ -97,7 +105,33 @@ class Board(ChessBoard):
         >>> board.get_pieces(ROOK, WHITE)
         [Piece('r', 'w', 'a1'), Piece('r', 'w', 'h1')]
         """
-        pass
+
+        pieces = [PIECES.index(piece)]
+        colours = [COLOURS.index(colour)]
+        if piece == NONE:
+            pieces = PIECE_TYPES
+        if colour == NONE:
+            colours = [False, True]
+        
+        result = []
+
+        for colour in colours:
+            for piece in pieces:
+                piece_type = PIECES[piece]
+                locations = self.pieces(piece, colour)
+                for square in locations:
+                    square_name = chess.square_name(square)
+                    new_piece = Piece(piece_type, COLOURS[colour], square_name)
+                    result.append(new_piece)
+
+        return result
+
+    def get_value(self, pieces: list[Piece]):
+        total_value = 0
+        for piece in pieces:
+            piece_value = self.piece_values[piece.type]
+            total_value += piece_value
+        return total_value
 
     def piece_attacks(piece: Piece) -> list[Piece] | None:
         """

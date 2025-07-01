@@ -1,14 +1,15 @@
 from chess import Board as ChessBoard
 from bots.bot_template import Bot
 from tools.constants import *
+from tools.board import *
 
 
 class MyBot(Bot):
     """ Example implementation of Bot. """
-    def heuristic(self, board: ChessBoard) -> float:
+    def heuristic(self, board: Board) -> float:
         return 0
     
-    def get_values(self) -> dict[str, float]:
+    def provide_piece_values(self) -> dict[str, float]:
         """ This method override is not used by the bot, but it demonstrates that you may override this method too. """
         return {
             KING: 18,
