@@ -1,16 +1,32 @@
 from bots.bot import Bot
 from tools.constants import *
 from tools.board import *
+from tools.heat_maps import *
+import random
 
 # add your imports here
 
 class MyBot(Bot):
     """ Implement your bot here. """
     def heuristic(self, board: Board) -> float:
-        """ Implement this method to evaluate the board position. """
+        """ Bot likes to push pawns. """
         my_colour: Colour=WHITE
         opposition_colour: Colour=BLACK
-        return 0
+
+        my_pawns = board.get_pieces(PAWN, my_colour)
+        my_pawns_score = find_positional_value(my_pawns, STAIRWAY, 0.1)
+
+        opposition_pawns = board.get_pieces(PAWN, opposition_colour)
+        opposition_pawns_score = find_positional_value(opposition_pawns, REVERSE_STAIRWAY, -0.1)
+
+        score = 0
+
+        score += my_pawns_score
+        score += opposition_pawns_score
+
+        score += board.get_value(board.get_pieces(colour=my_colour)) - board.get_value(board.get_pieces(colour=opposition_colour))
+
+        return score + random.random() / 100
 
 
     def provide_piece_values(self) -> dict[Piece, float]:

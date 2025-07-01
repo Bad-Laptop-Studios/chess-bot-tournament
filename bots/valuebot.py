@@ -8,8 +8,10 @@ class MyBot(Bot):
     """ Maximises the piece point advantage. """
     def heuristic(self, board: Board) -> float:
         """ Implement this method to evaluate the board position. """
-        
-        score = board.get_value(board.get_pieces(colour='w')) - board.get_value(board.get_pieces(colour='b'))
+        my_colour: Colour=WHITE
+        opposition_colour: Colour=BLACK
+                
+        score = board.get_value(board.get_pieces(colour=my_colour)) - board.get_value(board.get_pieces(colour=opposition_colour))
         return score
 
 

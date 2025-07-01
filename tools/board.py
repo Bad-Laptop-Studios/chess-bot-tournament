@@ -38,6 +38,11 @@ class Position:
         self.row = row
         self.col = col
 
+    @dispatch(int)
+    def __init__(self, square: int):
+        self.row = chess.square_rank(square) + 1
+        self.col = chess.square_file(square) + 1
+
     COLUMN_LOOKUP = "abcdefgh"
 
     def __str__(self):
@@ -90,7 +95,6 @@ class Board(ChessBoard):
     def retrieve_piece_values(self, piece_values: dict[PieceType, int]):
         self.piece_values = piece_values
 
-    # need to change colour to match the assumption that all bots are white
     def get_pieces(self, piece: PieceType=NONE, colour: Colour=NONE) -> list[Piece]:
         """
         >>> board = Board()
@@ -120,8 +124,7 @@ class Board(ChessBoard):
                 piece_type = PIECES[piece]
                 locations = self.pieces(piece, colour)
                 for square in locations:
-                    square_name = chess.square_name(square)
-                    new_piece = Piece(piece_type, COLOURS[colour], square_name)
+                    new_piece = Piece(piece_type, COLOURS[colour], Position(square))
                     result.append(new_piece)
 
         return result

@@ -1,3 +1,6 @@
+import chess
+from tools.board import Piece
+
 # ░ ▒ ▓ █
 
 ROWS = 8
@@ -15,6 +18,15 @@ def meta_element_inverse(array: list[list[int]], max: int):
 def inverse(array: list[list[int]]):
     meta_max = max(elem for row in array for elem in row)
     return meta_element_inverse(array, meta_max + 1)
+
+def find_positional_value(pieces: list[Piece], heat_map, multiplier=1):
+    value = 0
+    for piece in pieces:
+        position = piece.position
+        row = 9 - position.row # makes it so that row 0 is the bottow row
+        col = position.col
+        value += heat_map[row-1][col-1] * multiplier
+    return value
 
 
 # ██ ██ ██ ██ ██ ██ ██ ██

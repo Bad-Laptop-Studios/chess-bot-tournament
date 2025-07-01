@@ -16,7 +16,7 @@ WHITE = 'w'
 BLACK = 'b'
 NONE = '-' # (duplicate) is this improper??
 
-COLOURS = [WHITE, BLACK, NONE]
+COLOURS = [BLACK, WHITE, NONE] # BLACK = 0 = False, WHITE = 1 = TRUE
 
 
 PositionAlpha = str                 # eg. 'a1'
