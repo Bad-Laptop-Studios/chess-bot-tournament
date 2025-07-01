@@ -39,12 +39,19 @@ class Bot:
 
     def get_values(self) -> dict[Piece, float]:
         return {
-            KING: 18,
+            KING: 0, # represents the value of checking your opponent's king (may need to rethink this)
             QUEEN: 9,
             ROOK: 5,
             BISHOP: 3,
             KNIGHT: 3,
             PAWN: 1
+        }
+    
+    def get_game_over_evaluations(self) -> dict[str, float]:
+        return {
+            "win": INFINITY,
+            "draw": 0,
+            "loss": -INFINITY
         }
     
     @final
