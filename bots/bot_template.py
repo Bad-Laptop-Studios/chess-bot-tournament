@@ -8,21 +8,13 @@ class MyBot(Bot):
     """ Implement your bot here. """
     def heuristic(self, board: Board) -> float:
         """ Implement this method to evaluate the board position. """
-        my_colour: Colour=WHITE
-        opposition_colour: Colour=BLACK
-        return 0
-
-
-    def provide_piece_values(self) -> dict[Piece, float]:
-        """ Implement this method to modify the values assigned to each piece. """
-        return {
-            KING: 0,
-            QUEEN: 9,
-            ROOK: 5,
-            BISHOP: 3,
-            KNIGHT: 3,
-            PAWN: 1
-        }
+        my_colour: Colour = WHITE
+        opposition_colour: Colour = BLACK
+        piece_values: dict[Piece, int] = {} # put any overrides to the value of your pieces e.g. {KNIGHT: 4, PAWN: 2}
+                                            # feed this into board.get_value()
+                                            # e.g. values = board.get_value(my_pieces, piece_values)
+        score = 0
+        return score
     
     def provide_game_over_evaluations(self) -> dict[str, float]:
         """

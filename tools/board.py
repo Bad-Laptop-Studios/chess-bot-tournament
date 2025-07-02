@@ -29,8 +29,10 @@ class Position:
         """"""
         if not len(file_rank) == 2:
             pass    # TODO
-        self.row = 1
-        self.col = 1  
+        self.row = int(file_rank[1])
+        self.col = self.COLUMN_LOOKUP.index(file_rank[0]) + 1
+
+        self.square = (self.row - 1) * 8 + (self.col - 1)
 
     @dispatch(int, int)
     def __init__(self, row: int, col: int):
@@ -38,10 +40,14 @@ class Position:
         self.row = row
         self.col = col
 
+        self.square = (row - 1) * 8 + (col - 1)
+
     @dispatch(int)
     def __init__(self, square: int):
         self.row = chess.square_rank(square) + 1
         self.col = chess.square_file(square) + 1
+
+        self.square = square
 
     COLUMN_LOOKUP = "abcdefgh"
 
@@ -49,7 +55,7 @@ class Position:
         return self.get_alphanumeric()
     
     def get_alphanumeric(self) -> PositionAlpha:
-        return self.COLUMN_LOOKUP[self.col - 1] + str(self.row)
+        return chess.square_name(self.square)
     
     def get_vector(self) -> PositionVector:
         return self.row, self.col
@@ -83,6 +89,12 @@ class Piece:
         self.colour: Colour = colour
         self.position: Position = Position(position)
 
+    @dispatch(PieceType, Colour, int)
+    def __init__(self, type: PieceType, colour: Colour, position: int) -> None:
+        self.type: PieceType = type
+        self.colour: Colour = colour
+        self.position: Position = Position(position)
+
     def __str__(self):
         return f"Piece('{self.type}', '{self.colour}', '{self.position}')"
 
@@ -92,8 +104,14 @@ class Board(ChessBoard):
     # def __init__(self, piece_values: dict):
     #     self.piece_values: dict = piece_values
 
-    def retrieve_piece_values(self, piece_values: dict[PieceType, int]):
-        self.piece_values = piece_values
+    PIECE_VALUES = {
+        KING: 0,
+        QUEEN: 9,
+        ROOK: 5,
+        BISHOP: 3,
+        KNIGHT: 3,
+        PAWN: 1
+    }
 
     def get_pieces(self, piece: PieceType=NONE, colour: Colour=NONE) -> list[Piece]:
         """
@@ -110,7 +128,7 @@ class Board(ChessBoard):
         [Piece('r', 'w', 'a1'), Piece('r', 'w', 'h1')]
         """
 
-        pieces = [PIECES.index(piece)]
+        pieces = [PIECES.index(p) for p in piece]
         colours = [COLOURS.index(colour)]
         if piece == NONE:
             pieces = PIECE_TYPES
@@ -129,10 +147,10 @@ class Board(ChessBoard):
 
         return result
 
-    def get_value(self, pieces: list[Piece]):
+    def get_value(self, pieces: list[Piece], provided_piece_values: dict[Piece, int] = {}):
         total_value = 0
         for piece in pieces:
-            piece_value = self.piece_values[piece.type]
+            piece_value = provided_piece_values.get(piece.type, self.PIECE_VALUES[piece.type])
             total_value += piece_value
         return total_value
 

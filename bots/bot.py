@@ -36,17 +36,7 @@ class Bot:
         A high number represents a more favourable board state for the bot.
         """
         raise NotImplementedError
-    
 
-    def provide_piece_values(self) -> dict[PieceType, float]:
-        return {
-            KING: 0, # represents the value of checking your opponent's king (may need to rethink this)
-            QUEEN: 9,
-            ROOK: 5,
-            BISHOP: 3,
-            KNIGHT: 3,
-            PAWN: 1
-        }
     
     def provide_game_over_evaluations(self) -> dict[str, float]:
         return {
