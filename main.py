@@ -10,11 +10,12 @@ import bots.pawnbot as pawnbot
 import bots.piecebot as piecebot
 import bots.randobot as randbot
 
-TURN_DURATION = 0
+TURN_DURATION = 1
 SEARCH_DEPTH = 3 # must be odd
+last_wait_time = time.time()
 
 def main():   
-    bot1: Bot = pawnbot.MyBot(0)
+    bot1: Bot = randbot.MyBot(0)
     bot2: Bot = piecebot.MyBot(1)
 
     board: Board = Board()
@@ -29,10 +30,11 @@ def main():
 def make_move(board: Board, bot: Bot, board_display):
     best_move = get_evaluation(board, bot, 0)
     board.push(best_move)
+
+    wait_at_least(TURN_DURATION)
+
     print(best_move)
     display.update(board.fen(), board_display)
-    
-    time.sleep(TURN_DURATION)
 
 def get_evaluation(board: Board, bot: Bot, current_depth):
     if board.is_game_over():
@@ -68,6 +70,20 @@ def get_game_over_evaluation(board: Board, bot: Bot, current_depth):
             return evaluations["win"] - current_depth # incentivises playing the soonest checkmate
         return evaluations["loss"]
     return evaluations["draw"]
+
+# makes the current move occur at least the given period after the previous
+def wait_at_least(period: int):
+    global last_wait_time
+    current_time = time.time()
+    
+    time_elapsed = current_time - last_wait_time
+
+    sleep_duration = period - time_elapsed
+
+    if sleep_duration > 0:
+        time.sleep(sleep_duration)
+    
+    last_wait_time = current_time
 
 if __name__ == "__main__":
     main()
