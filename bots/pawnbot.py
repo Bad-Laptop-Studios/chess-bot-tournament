@@ -24,7 +24,7 @@ class MyBot(Bot):
         score += my_pawns_score
         score += opposition_pawns_score
 
-        score += board.get_value(board.get_pieces(colour=my_colour)) - board.get_value(board.get_pieces(colour=opposition_colour))
+        score += board.get_value(board.get_pieces(my_colour)) - board.get_value(board.get_pieces(opposition_colour))
 
         return score + random.random() / 100
 

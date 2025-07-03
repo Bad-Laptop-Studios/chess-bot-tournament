@@ -16,7 +16,7 @@ last_wait_time = time.time()
 
 def main():   
     bot1: Bot = randbot.MyBot(0)
-    bot2: Bot = piecebot.MyBot(1)
+    bot2: Bot = pawnbot.MyBot(1)
 
     board: Board = Board()
 

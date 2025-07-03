@@ -118,6 +118,8 @@ class Board(ChessBoard):
         >>> board = Board()
         >>> board.get_pieces()
         [... every piece on the board ...]
+        >>> board.get_pieces(my_colour)
+        [... all of your pieces on the board ...]
         >>> board.get_pieces(QUEEN)
         [Piece('q', 'w', 'd1'), Piece('q', 'b', 'd8')]
         >>> board.get_pieces(QUEEN, WHITE)
@@ -126,16 +128,18 @@ class Board(ChessBoard):
         [Piece('q', 'b', 'd8')]
         >>> board.get_pieces(ROOK, WHITE)
         [Piece('r', 'w', 'a1'), Piece('r', 'w', 'h1')]
+        >>> board.get_pieces([QUEEN, ROOK], WHITE)
+        [Piece('q', 'w', 'd1'), Piece('r', 'w', 'a1'), Piece('r', 'w', 'h1')]
         """
 
-        pieces = [PIECES.index(p) for p in piece]
-        colours = [COLOURS.index(colour)]
-        if piece == NONE:
-            pieces = PIECE_TYPES
-        if colour == NONE:
-            colours = [False, True]
+        # swap variables if a colour was provided as the first argument
+        if WHITE in piece or BLACK in piece:
+            piece, colour = colour, piece
+
+        pieces = self.get_piece_list(piece)
+        colours = self.get_colour_list(colour)
         
-        result = []
+        piece_list = []
 
         for colour in colours:
             for piece in pieces:
@@ -143,11 +147,44 @@ class Board(ChessBoard):
                 locations = self.pieces(piece, colour)
                 for square in locations:
                     new_piece = Piece(piece_type, COLOURS[colour], Position(square))
-                    result.append(new_piece)
+                    piece_list.append(new_piece)
 
-        return result
+        return piece_list
+    
+    def get_piece_list(self, piece):
+        pieces = [PIECES.index(p) for p in piece]
+        if piece == NONE:
+            pieces = PIECE_TYPES
+        return pieces
+    
+    def get_colour_list(self, colour):
+        colours = [COLOURS.index(c) for c in colour]
+        if colour == NONE:
+            colours = [False, True]
+        return colours
 
     def get_value(self, pieces: list[Piece], provided_piece_values: dict[Piece, int] = {}):
+        """
+        >>> board = Board()
+        >>> pieces = board.get_pieces()
+        >>> board.get_value(pieces)
+        78                                          # total value of all pieces, initially
+        >>> pawns = board.get_pieces(PAWN)
+        >>> board.get_value(pawns)
+        16                                          # total value of the initial 16 pawns
+        >>> my_pieces = board.get_pieces(my_colour)
+        >>> board.get_value(my_pieces)
+        39                                          # total value of all your pieces, initially
+        >>> my_pawns = board.get_pieces(PAWN, my_colour)
+        >>> board.get_value(my_pawns)
+        8                                           # total value of your initial 8 pawns
+        >>> board.get_value(my_pawns, {PAWN:1.5})
+        12.0                                        # total value of your initial 8 pawns if they were worth 1.5 points each
+        >>> my_minor_pieces = board.get_pieces([KNIGHT, BISHOP], my_colour)
+        >>> board.get_value(my_minor_pieces, {KNIGHT: 2.5, BISHOP: 4})
+        13.0                                        # total value of your initial knights and bishops
+                                                    # if your knights were worth 2.5 and bishops were worth 4
+        """
         total_value = 0
         for piece in pieces:
             piece_value = provided_piece_values.get(piece.type, self.PIECE_VALUES[piece.type])
