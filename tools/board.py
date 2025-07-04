@@ -151,6 +151,7 @@ class Board(ChessBoard):
 
         return piece_list
     
+    # potentially move these out of board
     def get_piece_list(self, piece):
         pieces = [PIECES.index(p) for p in piece]
         if piece == NONE:
@@ -191,27 +192,101 @@ class Board(ChessBoard):
             total_value += piece_value
         return total_value
 
-    def piece_attacks(piece: Piece) -> list[Piece] | None:
+    def get_control(self, position: Position, ghost_piece: PieceType=NONE) -> list[Piece] | None:
         """
         """
+        if ghost_piece != NONE:
+            ghost_piece = Piece(ghost_piece, WHITE, position)
+            removed_piece = self.remove_piece_at(position)
+            self.set_piece_at(position, ghost_piece)
 
-    def position_attacks(position: Position) -> list[Piece] | None:
-        """
-        CODE IS INVALID
-        >>> board = Board()
-        >>> board.get_pieces(board, WHITE, 'a1')
-        []
-        >>> board.get_pieces(board, WHITE, 'd4')
-        None                                            # no piece at d4
-        >>> board.move(board, WHITE, 'd2d3')            # not a real function
-        >>> board.move(board, WHITE, 'c1h6')
-        >>> board.get_pieces(board, WHITE, 'h6')
-        ['g7']
+        move_positions = self.attacks(position.square)
 
-        >>> board.get_pieces(board, WHITE, 'd6', QUEEN)
-        ['c7', 'd7', 'e7']
-        >>> board.get_pieces(board, WHITE, 'd6', KNIGHT)
-        ['b7', 'c8', 'e8', 'f7']
-        """
-        pass
+        move_pieces = self.convert_positions_to_pieces(move_positions)
 
+        if ghost_piece != NONE:
+            self.set_piece_at(position, removed_piece)
+        
+        return move_pieces
+    
+    def get_moves(self, position: Position, ghost_piece: PieceType=NONE, moving_colour: Colour=NONE) -> list[Piece] | None:
+        """
+        """
+        controlled_pieces = self.get_control(position, ghost_piece)
+        moving_colour = self.get_colour_at(position, moving_colour)
+        other_colour = self.get_other_colour(moving_colour)
+        moves = self.pieces_matching_colours(controlled_pieces, [other_colour, NONE])
+        return moves
+    
+    def get_attacks(self, position: Position, ghost_piece: PieceType=NONE, attacking_colour: Colour=NONE) -> list[Piece] | None:
+        """
+        """
+        controlled_pieces = self.get_control(position, ghost_piece)
+        attacking_colour = self.get_colour_at(position, attacking_colour)
+        other_colour = self.get_other_colour(attacking_colour)
+        attacked_pieces = self.pieces_matching_colours(controlled_pieces, other_colour)
+        return attacked_pieces
+    
+    def get_attackers(self, position: Position, attacking_colour: Colour=NONE) -> list[Piece] | None:
+        """
+        """
+        defending_colour = self.get_other_colour(attacking_colour)
+        defending_colour = self.get_colour_at(position, defending_colour)
+        attacking_colour = self.get_other_colour(defending_colour)
+
+        attacking_chess_colour = COLOURS.index(attacking_colour)
+        attacker_positions = self.attackers(attacking_chess_colour, position.square)
+        attacker_pieces = self.convert_positions_to_pieces(attacker_positions)
+        return attacker_pieces
+    
+    def get_defends(self, position: Position, ghost_piece: PieceType=NONE, defending_colour: Colour=NONE) -> list[Piece] | None:
+        """
+        """
+        controlled_pieces = self.get_control(position, ghost_piece)
+        defending_colour = self.get_colour_at(position, defending_colour)
+        defended_pieces = self.pieces_matching_colours(controlled_pieces, defending_colour)
+        return defended_pieces
+    
+    def get_defenders(self, position, defending_colour: Colour=NONE) -> list[Piece] | None:
+        """
+        """
+        defending_colour = self.get_colour_at(position, defending_colour)
+        defending_chess_colour = COLOURS.index(defending_colour)
+        defender_positions = self.attackers(defending_chess_colour, position.square)
+        defender_pieces = self.convert_positions_to_pieces(defender_positions)
+        return defender_pieces
+
+    def convert_positions_to_pieces(self, positions):
+        """
+        """
+        pieces = []
+        for position in positions:
+            piece_type = self.piece_type_at(position)
+            if piece_type == None: piece_type = 0
+            piece_type = PIECES[piece_type]
+
+            piece_colour = self.color_at(position)
+            if piece_colour == None: piece_colour = 2
+            piece_colour = COLOURS[piece_colour]
+
+            piece = Piece(piece_type, piece_colour, Position(position))
+            pieces.append(piece)
+        return pieces
+    
+    # should move outside board
+    def get_other_colour(self, colour):
+        if colour == NONE:
+            return NONE
+        return COLOURS[not COLOURS.index(colour)]
+    
+    def get_colour_at(self, position: Position, override_colour: Colour=NONE):
+        if override_colour == NONE:
+            return COLOURS[self.color_at(position.square)]
+        return override_colour
+    
+    def pieces_matching_colours(self, pieces: list[Piece], colours: list[Colour]):
+        result = []
+        for piece in pieces:
+            if piece.colour in colours:
+                result.append(piece)
+        return result
