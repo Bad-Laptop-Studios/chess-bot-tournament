@@ -1,6 +1,7 @@
 from bots.bot import Bot
 from tools.constants import *
 from tools.board import *
+import random
 
 # add your imports here
 
@@ -12,7 +13,8 @@ class MyBot(Bot):
         opposition_colour: Colour=BLACK
                 
         score = board.get_value(board.get_pieces(colour=my_colour)) - board.get_value(board.get_pieces(colour=opposition_colour))
-        return score
+        noise = random.random()     # no need to scale as lowest piece value is 1
+        return score + noise
 
 
     def provide_piece_values(self) -> dict[Piece, float]:
